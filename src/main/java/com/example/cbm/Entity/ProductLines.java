@@ -16,9 +16,9 @@ import javax.persistence.*;
 @Entity
 public class ProductLines {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "productLine", columnDefinition = "VARCHAR(36)")
+    @GeneratedValue(generator = "randomStringGenerator")
+    @GenericGenerator(name = "randomStringGenerator", strategy = "com.example.cbm.Controller.RandomStringGenerator")
+    @Column(name = "productLine", length = 7)
     private String productLine;
 
     @Column

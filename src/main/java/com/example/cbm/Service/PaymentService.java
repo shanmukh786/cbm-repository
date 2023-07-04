@@ -114,6 +114,12 @@ public class PaymentService {
 
         return office;
     }
+    public List<Payments> getPaymentsByCustomer(Integer customerNumber) {
+        return paymentRepository.findByCustomersCustomerNumber(customerNumber);
+    }
+    public List<Payments> getPaymentsByDateRange(Date startDate, Date endDate) {
+        return paymentRepository.findByPaymentDateBetween(startDate, endDate);
+    }
 
 }
 

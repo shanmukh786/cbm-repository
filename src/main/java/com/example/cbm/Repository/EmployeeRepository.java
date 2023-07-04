@@ -11,4 +11,7 @@ public interface EmployeeRepository extends JpaRepository<Employees,Integer> {
 
     List<Employees> findByOffices_City(String city);
 
+    List<Employees> findByOfficesOfficeCode(String officeCode);
+
+    List<Employees> findByOfficesCity(String city);
 }

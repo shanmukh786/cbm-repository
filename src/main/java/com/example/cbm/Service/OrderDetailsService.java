@@ -73,4 +73,16 @@ public class OrderDetailsService {
 
         return totalSale != null ? totalSale : BigDecimal.ZERO;
     }
+    public int getOrderDetailsCountByOrderNumber(int orderNumber) {
+        List<OrderDetails> orderDetailsList = orderDetailsRepository.findAll();
+        int count = 0;
+
+        for (OrderDetails orderDetails : orderDetailsList) {
+            if (orderDetails.getOrder().getOrderNumber() == orderNumber) {
+                count++;
+            }
+        }
+
+        return count;
+    }
 }

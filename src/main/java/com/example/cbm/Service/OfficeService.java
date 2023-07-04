@@ -6,6 +6,8 @@ import com.example.cbm.Repository.OfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Service
@@ -16,34 +18,63 @@ public class OfficeService {
     public void setOfficeRepository(OfficeRepository officeRepository) {
         this.officeRepository = officeRepository;
     }
+    EntityManager entityManager;
+    @Autowired
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
-    public String saveOffice(Offices offices)
+    public Offices saveOffice(Offices offices)
     {
-        officeRepository.save(offices);
-        return "office details added successfully";
+        return officeRepository.save(offices);
+
     }
-    public Offices getOfficeDetails(String id)
-    {
-        return officeRepository.findById(id).get();
+
+
+    public Offices findByOfficeCode(String officeCode) {
+        return officeRepository.findByOfficeCode(officeCode);
     }
-    public String updatePhoneNumber(String id)
-    {
-        return "office phone number updated successfully";
+
+    public String updatePhoneNumber(String officeCode, String phone) {
+        Offices offices = officeRepository.findByOfficeCode(officeCode);
+        String s = new String();
+        if(offices!=null)
+        {
+            offices.setPhone(phone);
+            officeRepository.save(offices);
+            s = "office phone number updated successfully";
+        }
+        else {
+
+        }
+        return s;
     }
-    public String updateOfficeAddress(String id)
-    {
-        return "office address updated successfully";
+    public String updateAddress(String officeCode, String address) {
+        Offices offices = officeRepository.findByOfficeCode(officeCode);
+        String s = new String();
+        if(offices!=null)
+        {
+            offices.setAddressLine1(address);
+            officeRepository.save(offices);
+            s = "office address updated successfully";
+        }
+        else {
+            s = "Office not found";
+        }
+        return s;
     }
-    public List<Customers> getAllCustomersByOfficeCode(String officeCode)
-    {
-        return null;
-    }
-    public List<Offices> getOfficesByCities(List<String> cities) {
+    public List<Customers> getCustomersByOfficeCode(String officeCode) {
+            String queryString = "SELECT c " +
+                    "FROM Customers c " +
+                    "WHERE c.employees.offices.officeCode = :officeCode";
+
+            return entityManager.createQuery(queryString, Customers.class)
+                    .setParameter("officeCode", officeCode)
+                    .getResultList();
+        }
+    public List<Offices> getOfficesByCities(String... cities) {
         return officeRepository.findByCityIn(cities);
     }
-    public Offices findByCode(String code)
-    {
-        return officeRepository.findByOfficeCode(code);
-    }
+
 
 }

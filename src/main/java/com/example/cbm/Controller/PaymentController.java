@@ -52,6 +52,7 @@ public class PaymentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @PutMapping(value = "update1/{customer_number}/{check_number}")
     public ResponseEntity<String> updateCheckAmountForCustomer(
             @PathVariable Integer customer_number,
             @PathVariable String check_number,@RequestParam BigDecimal amount)
@@ -97,6 +98,17 @@ public class PaymentController {
     public ResponseEntity<Offices> getOfficeWithMaxPaymentCollection() {
         Offices office = paymentService.getOfficeWithMaxPaymentCollection();
         return new ResponseEntity<Offices>(office, HttpStatus.OK);
+    }
+    @GetMapping("payments/a/{customer_number}")
+    public List<Payments> getPaymentsByCustomer(@PathVariable Integer customer_number) {
+        return paymentService.getPaymentsByCustomer(customer_number);
+    }
+    @GetMapping("/customers/{start_Pay_date}/{end_Pay_date}")
+    public List<Payments> getPaymentsByDateRange(
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date start_Pay_date,
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date end_Pay_date
+    ) {
+        return paymentService.getPaymentsByDateRange(start_Pay_date, end_Pay_date);
     }
 
 }

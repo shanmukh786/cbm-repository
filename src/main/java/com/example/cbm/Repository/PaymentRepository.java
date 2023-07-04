@@ -20,5 +20,6 @@ public interface PaymentRepository extends JpaRepository<Payments,String> {
 
     List<Payments> findByCustomersCustomerNumber(Integer customerNumber);
 
+    List<Payments> findByPaymentDateBetween(Date startDate, Date endDate);
 }
 

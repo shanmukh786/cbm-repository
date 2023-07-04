@@ -10,5 +10,7 @@ import java.util.List;
 public interface OfficeRepository extends JpaRepository<Offices,String> {
 
     public Offices findByOfficeCode(String code);
-    List<Offices> findByCityIn(List<String> cities);
+
+
+    List<Offices> findByCityIn(String[] cities);
 }

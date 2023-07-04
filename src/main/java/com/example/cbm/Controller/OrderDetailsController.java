@@ -65,5 +65,9 @@ public class OrderDetailsController {
         BigDecimal totalSale = orderDetailsService.getTotalSale();
         return new ResponseEntity<>(totalSale, HttpStatus.OK);
     }
+    @GetMapping("/count/{orderNumber}")
+    public int getOrderDetailsCountByOrderNumber(@PathVariable int orderNumber) {
+        return orderDetailsService.getOrderDetailsCountByOrderNumber(orderNumber);
+    }
 
 }

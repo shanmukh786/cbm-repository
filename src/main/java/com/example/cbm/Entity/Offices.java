@@ -13,9 +13,9 @@ import javax.persistence.*;
 @Entity
 public class Offices {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "officeCode", columnDefinition = "VARCHAR(36)")
+    @GeneratedValue(generator = "randomStringGenerator")
+    @GenericGenerator(name = "randomStringGenerator", strategy = "com.example.cbm.Controller.RandomStringGenerator")
+    @Column(name = "officeCode", length = 4)
     private String officeCode;
     @Column
     private String city;
