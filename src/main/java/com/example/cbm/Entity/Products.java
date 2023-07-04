@@ -17,9 +17,9 @@ import java.math.BigDecimal;
 @Entity
 public class Products {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "productCode", columnDefinition = "VARCHAR(36)")
+    @GeneratedValue(generator = "randomStringGenerator")
+    @GenericGenerator(name = "randomStringGenerator", strategy = "com.example.cbm.Controller.RandomStringGenerator")
+    @Column(name = "productCode", length = 7)
     private String productCode;
     @Column
     private String productName;

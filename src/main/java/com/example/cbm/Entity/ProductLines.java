@@ -8,11 +8,12 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
-@Entity
+
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class ProductLines {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid2")

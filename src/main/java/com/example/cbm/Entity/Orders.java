@@ -1,5 +1,6 @@
 package com.example.cbm.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
@@ -17,10 +18,13 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer orderNumber;
     @Column
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date orderDate;
     @Column
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date requiredDate;
     @Column
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date shippedDate;
     @Column
     private String status;
