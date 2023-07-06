@@ -5,6 +5,7 @@ import com.example.cbm.DTO.CustomerOrderPaymentDetails;
 import com.example.cbm.Entity.Customers;
 import com.example.cbm.Entity.Orders;
 import com.example.cbm.Entity.Payments;
+import com.example.cbm.Exception.CustomerNotFoundException;
 import com.example.cbm.Repository.CustomerRepository;
 import com.example.cbm.Repository.OrderRepository;
 import com.example.cbm.Repository.PaymentRepository;
@@ -46,90 +47,140 @@ public class CustomerService {
         return "Record Created Successfully";
     }
     public List<Customers> searchCustomersByName(String name) {
-        return customerRepository.findByCustomerName(name);
+        List<Customers> customers = customerRepository.findByCustomerName(name);
+
+        if (customers.isEmpty()) {
+            throw new CustomerNotFoundException("Customer not found with name: " + name);
+        }
+
+        return customers;
     }
+
     public List<Customers> searchCustomersByCity(String city) {
-        return customerRepository.findByCity(city);
+
+        List<Customers> customers =  customerRepository.findByCity(city);
+        if (customers.isEmpty()) {
+            throw new CustomerNotFoundException("Customer not found in city : " + city);
+        }
+        return customers;
     }
     public Customers getCustomerByCustomerNumber(Integer customerNumber) {
-        return customerRepository.findByCustomerNumber(customerNumber);
+        Customers customer = customerRepository.findByCustomerNumber(customerNumber);
+        if (customer == null) {
+            throw new CustomerNotFoundException("Customer not found with customer number: " + customerNumber);
+        }
+        return customer;
     }
     public List<Customers> getCustomersByOfficeCode(String officeCode) {
-        return customerRepository.findByEmployees_Offices_OfficeCode(officeCode);
+        List<Customers> customers= customerRepository.findByEmployees_Offices_OfficeCode(officeCode);
+        if (customers.isEmpty()) {
+            throw new CustomerNotFoundException("Customer not found with officeCode : " + officeCode);
+        }
+        return customers;
     }
     public List<Customers> searchCustomersBySalesRepEmployeeNumber(Integer employeeNumber) {
-        String queryString = "SELECT c " +
-                "FROM Customers c " +
-                "WHERE c.employees.employeeNumber = :employeeNumber";
 
-        TypedQuery<Customers> query = entityManager.createQuery(queryString, Customers.class);
-        query.setParameter("employeeNumber", employeeNumber);
+            String queryString = "SELECT c " +
+                    "FROM Customers c " +
+                    "WHERE c.employees.employeeNumber = :employeeNumber";
 
-        return query.getResultList();
-
+            TypedQuery<Customers> query = entityManager.createQuery(queryString, Customers.class);
+            query.setParameter("employeeNumber", employeeNumber);
+        List<Customers> customers= query.getResultList();
+        if (customers.isEmpty()) {
+            throw new CustomerNotFoundException("Customer not found with SalesRepEmployeeNumber : " + employeeNumber);
+        }
+        return customers;
 
     }
     public List<Customers> searchByCountry(String country) {
-        return customerRepository.findByCountry(country);
+
+        List<Customers> customers= customerRepository.findByCountry(country);
+        if (customers.isEmpty()) {
+            throw new CustomerNotFoundException("Customer not found in country : " + country);
+        }
+        return customers;
     }
 
     public Customers searchByPhoneNumber(String phone) {
 
-        return customerRepository.findByPhone(phone);
+
+        Customers customer = customerRepository.findByPhone(phone);
+        if (customer == null) {
+            throw new CustomerNotFoundException("Customer not found with phone: " + phone);
+        }
+        return customer;
+
     }
 
-    public List<Customers> searchByContactFirstName(String firstName) {
-        return customerRepository.findByContactFirstName(firstName);
-    }
 
     public List<Customers> searchByContactLastName(String lastName) {
-        return customerRepository.findByContactLastName(lastName);
+
+        List<Customers> customers= customerRepository.findByContactLastName(lastName);
+        if (customers.isEmpty()) {
+            throw new CustomerNotFoundException("Customer not found with LastName : " + lastName);
+        }
+        return customers;
     }
     public Customers updateCustomerName(Integer customerNumber, String newName) {
         Customers customer = customerRepository.findById(customerNumber).get();
-        if (customer != null) {
-            customer.setCustomerName(newName);
+        if (customer == null) {
+            throw new CustomerNotFoundException("Customer not found with number: " + customerNumber);
         }
+        customer.setCustomerName(newName);
         return customer;
     }
     public Customers updateContactLastName(Integer customerNumber, String newName) {
         Customers customer = customerRepository.findById(customerNumber).get();
-        if (customer != null) {
-            customer.setContactLastName(newName);
+        if (customer == null) {
+            throw new CustomerNotFoundException("Customer not found with number: " + customerNumber);
         }
+        customer.setContactLastName(newName);
         return customer;
     }
     public Customers updateContactFirstName(Integer customerNumber, String newFirstName) {
         Customers customer = customerRepository.findById(customerNumber).get();
-        if (customer != null) {
-            customer.setContactFirstName(newFirstName);
+        if (customer == null) {
+            throw new CustomerNotFoundException("Customer not found with number: " + customerNumber);
         }
+        customer.setContactFirstName(newFirstName);
         return customer;
     }
     public String updateCustomerAddress(Integer customerNumber, String newAddressLine1, String newAddressLine2, String newCity, String newState, String newCountry, String newPostalCode) {
         Customers customer = customerRepository.findById(customerNumber).get();
-        if (customer != null) {
-            customer.setAddressLine1(newAddressLine1);
-            customer.setAddressLine2(newAddressLine2);
-            customer.setCity(newCity);
-            customer.setState(newState);
-            customer.setCountry(newCountry);
-            customer.setPostalCode(newPostalCode);
+        if (customer == null) {
+            throw new CustomerNotFoundException("Customer not found with number: " + customerNumber);
 
         }
+        customer.setAddressLine1(newAddressLine1);
+        customer.setAddressLine2(newAddressLine2);
+        customer.setCity(newCity);
+        customer.setState(newState);
+        customer.setCountry(newCountry);
+        customer.setPostalCode(newPostalCode);
         return "customer address updated successfully";
     }
 
 
     public List<Customers> searchCustomersByPostalCode(String postalCode) {
-        return customerRepository.findByPostalCode(postalCode);
+        List<Customers> customers = customerRepository.findByPostalCode(postalCode);
+        if (customers.isEmpty()) {
+            throw new CustomerNotFoundException("Customer not found with PostalCode : " + postalCode);
+        }
+        return customers;
     }
 
     public List<Customers> getCustomersByCreditRange(BigDecimal minCredit, BigDecimal maxCredit) {
         List<Customers> customers = customerRepository.findAll();
-        return customers.stream()
+
+        List<Customers> customers1 = customers.stream()
                 .filter(c -> c.getCreditLimit().compareTo(minCredit) >= 0 && c.getCreditLimit().compareTo(maxCredit) <= 0)
                 .collect(Collectors.toList());
+        if(customers1.isEmpty())
+        {
+            throw new CustomerNotFoundException("Customer not found with given Credit Range");
+        }
+        return customers1;
     }
     public Collection<Customers> getCustomersByPage(int pageNo, String sortBy, Sort.Direction sortDirection, int pageSize) {
         Sort sort = Sort.by(sortDirection, sortBy);
@@ -142,40 +193,73 @@ public class CustomerService {
     public List<Customers> searchCustomersByFirstName(String searchString) {
         List<Customers> allCustomers = customerRepository.findAll();
 
-        return allCustomers.stream()
+        List<Customers> customers1 = allCustomers.stream()
                 .filter(customer -> customer.getContactFirstName().contains(searchString))
                 .collect(Collectors.toList());
+        if(customers1.isEmpty())
+        {
+            throw new CustomerNotFoundException("Customer not found with given FirstName");
+        }
+        return customers1;
     }
     public List<Customers> searchCustomersByGreaterCreditLimit(BigDecimal creditLimit) {
         List<Customers> allCustomers = customerRepository.findAll();
-
-        return allCustomers.stream()
+        String stringValue = creditLimit.toString();
+        List<Customers> customers1 = allCustomers.stream()
                 .filter(customer -> customer.getCreditLimit().compareTo(creditLimit) > 0)
                 .collect(Collectors.toList());
+        if(customers1.isEmpty())
+        {
+            throw new CustomerNotFoundException("Customer not found with Credit limit greater than" + stringValue);
+        }
+        return customers1;
     }
 
     public List<Customers> searchCustomersByLowerCreditLimit(BigDecimal creditLimit) {
         List<Customers> customersList = customerRepository.findAll();
-        return customersList.stream()
+        String stringValue = creditLimit.toString();
+        List<Customers> customers1 = customersList.stream()
                 .filter(customer -> customer.getCreditLimit().compareTo(creditLimit) < 0)
                 .collect(Collectors.toList());
+        if(customers1.isEmpty())
+        {
+            throw new CustomerNotFoundException("Customer not found with Credit limit less than" + stringValue);
+        }
+        return customers1;
     }
 
 
 
     public List<Payments> getPaymentDetailsForCustomer(Integer customerNumber) {
-
-        return entityManager
+        Customers customer = customerRepository.findById(customerNumber).get();
+        if (customer == null) {
+            throw new CustomerNotFoundException("Customer not found with number: " + customerNumber);
+        }
+        List<Payments> payments = entityManager
                 .createQuery("SELECT p FROM Payments p WHERE p.customers.customerNumber = :customerNumber", Payments.class)
                 .setParameter("customerNumber", customerNumber)
                 .getResultList();
+        if(payments.isEmpty())
+        {
+            throw new CustomerNotFoundException("No Payment Details for CustomerNumber" + customerNumber);
+        }
+        return payments;
     }
+
 
 
     public List<Customers> searchCustomersByCreditLimit(BigDecimal creditLimt) {
-        return customerRepository.findByCreditLimit(creditLimt);
+        List<Customers> customers = customerRepository.findByCreditLimit(creditLimt);
+        if (customers.isEmpty()) {
+            throw new CustomerNotFoundException("Customer not found with creditLimit : " + creditLimt);
+        }
+        return customers;
     }
     public Collection<Object[]> getOrderDetailsForCustomer(Integer customerNumber) {
+        Customers customer = customerRepository.findById(customerNumber).get();
+        if (customer == null) {
+            throw new CustomerNotFoundException("Customer not found with number: " + customerNumber);
+        }
         String queryString = "SELECT od, p, o, e " +
                 "FROM OrderDetails od " +
                 "JOIN od.product p " +
@@ -187,9 +271,18 @@ public class CustomerService {
         TypedQuery<Object[]> query = entityManager.createQuery(queryString, Object[].class);
         query.setParameter("customerNumber", customerNumber);
 
-        return query.getResultList();
+        Collection<Object[]> objects = query.getResultList();
+        if (objects.isEmpty()) {
+            throw new CustomerNotFoundException("No order details found for Customer : " + customerNumber);
+        }
+        return objects;
     }
     public Collection<CustomerOrderPaymentDetails> getOrderAndPaymentDetailsForCustomer(String customerName) {
+        List<Customers> customers1 = customerRepository.findByCustomerName(customerName);
+
+        if (customers1.isEmpty()) {
+            throw new CustomerNotFoundException("Customer not found with name: " + customerName);
+        }
         String queryString = "SELECT new com.example.cbm.DTO.CustomerOrderPaymentDetails(o, p) " +
                 "FROM Orders o " +
                 "JOIN o.customers c " +
@@ -199,6 +292,11 @@ public class CustomerService {
         TypedQuery<CustomerOrderPaymentDetails> query = entityManager.createQuery(queryString, CustomerOrderPaymentDetails.class);
         query.setParameter("customerName", customerName);
 
-        return query.getResultList();
+        Collection<CustomerOrderPaymentDetails> customerOrderPaymentDetails = query.getResultList();
+        if(customerOrderPaymentDetails.isEmpty())
+        {
+            throw new CustomerNotFoundException("No order payment details found for Customer : " + customerName);
+        }
+        return customerOrderPaymentDetails;
     }
 }

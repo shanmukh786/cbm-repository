@@ -17,12 +17,12 @@ public class OrderDetails {
     @EmbeddedId
     private OrderDetailsId id;
 
-    @MapsId("order_number")
+    @MapsId("orderNumber")
     @ManyToOne
     @JoinColumn(name = "orderNumber")
     private Orders order;
 
-    @MapsId("product_code")
+    @MapsId("productCode")
     @ManyToOne
     @JoinColumn(name = "productCode")
     private Products product;

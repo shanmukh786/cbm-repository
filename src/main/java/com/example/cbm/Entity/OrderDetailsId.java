@@ -4,28 +4,28 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 @Embeddable
 public class OrderDetailsId implements Serializable {
-    private Integer order_number;
-    private String product_code;
+    private Integer orderNumber;
+    private String productCode;
 
     public Integer getOrder_number() {
-        return order_number;
+        return orderNumber;
     }
 
-    public void setOrder_number(Integer order_number) {
-        this.order_number = order_number;
+    public void setOrder_number(Integer orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public String getProduct_code() {
-        return product_code;
+        return productCode;
     }
 
-    public void setProduct_code(String product_code) {
-        this.product_code = product_code;
+    public void setProduct_code(String productCode) {
+        this.productCode = productCode;
     }
 
-    public OrderDetailsId(Integer order_number, String product_code) {
-        this.order_number = order_number;
-        this.product_code = product_code;
+    public OrderDetailsId(Integer orderNumber, String productCode) {
+        this.orderNumber = orderNumber;
+        this.productCode = productCode;
     }
 
     @Override

@@ -51,7 +51,7 @@ public class CustomerController {
         Customers customers= customerService.getCustomerByCustomerNumber(customer_number);
         return new ResponseEntity<>(customers,HttpStatus.OK);
     }
-    @GetMapping("/sales_rep_employee_number /{sales_rep_employee_number }")
+    @GetMapping("/sales_rep_employee_number/{sales_rep_employee_number}")
     public List<Customers> searchCustomersBySalesRepEmployeeNumber(@PathVariable Integer sales_rep_employee_number) {
         return customerService.searchCustomersBySalesRepEmployeeNumber(sales_rep_employee_number);
     }
@@ -76,7 +76,7 @@ public class CustomerController {
     @GetMapping(value = "/contact_lastname/{contact_lastname}")
     public ResponseEntity<List<Customers>> getCustomerByLastName(@PathVariable String contact_lastname)
     {
-        List<Customers> customers= customerService.searchCustomersByFirstName(contact_lastname);
+        List<Customers> customers= customerService.searchByContactLastName(contact_lastname);
         return new ResponseEntity<>(customers,HttpStatus.OK);
     }
     @PutMapping(value="/{customer_number}/{customer_name}")
